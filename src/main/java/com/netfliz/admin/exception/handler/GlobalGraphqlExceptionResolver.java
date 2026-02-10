@@ -1,0 +1,33 @@
+package com.netfliz.admin.exception.handler;
+
+import com.netfliz.admin.exception.BadRequestException;
+import graphql.GraphQLError;
+import graphql.GraphqlErrorBuilder;
+import graphql.schema.DataFetchingEnvironment;
+import jakarta.validation.ValidationException;
+import org.springframework.graphql.execution.DataFetcherExceptionResolverAdapter;
+import org.springframework.graphql.execution.ErrorType;
+import org.springframework.stereotype.Component;
+
+@Component
+public class GlobalGraphqlExceptionResolver extends DataFetcherExceptionResolverAdapter {
+
+    @Override
+    protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
+        if (ex instanceof BadRequestException || ex instanceof ValidationException) {
+            return GraphqlErrorBuilder.newError()
+                    .message(ex.getMessage())
+                    .path(env.getExecutionStepInfo().getPath())
+                    .location(env.getField().getSourceLocation())
+                    .errorType(ErrorType.BAD_REQUEST)
+                    .build();
+        }
+
+        return GraphqlErrorBuilder.newError()
+                .message(ex.getMessage() == null ? "Đã có lỗi xảy ra!" : ex.getMessage())
+                .path(env.getExecutionStepInfo().getPath())
+                .location(env.getField().getSourceLocation())
+                .errorType(ErrorType.INTERNAL_ERROR)
+                .build();
+    }
+}
