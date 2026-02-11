@@ -23,8 +23,6 @@ public class UserDto {
     private String lastName;
     @NotBlank(message = "Email không được để trống")
     private String email;
-    @NotBlank(message = "Password không được để trống")
-    private String password;
     private String phone;
     @NotNull(message = "Role không được để trống")
     private Role role;

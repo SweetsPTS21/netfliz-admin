@@ -27,10 +27,10 @@ public class UserMapper {
                 .build();
     }
 
-    public UserEntity mapToEntity(UserDto from) {
+    public UserEntity createUserEntity(UserDto from) {
         return UserEntity.builder()
                 .username(CommonUtils.generateUsername(from.getEmail()))
-                .password(passwordEncoder.encode(from.getPassword()))
+                .password(passwordEncoder.encode(CommonUtils.generatePassword()))
                 .firstName(from.getFirstName())
                 .lastName(from.getLastName())
                 .email(from.getEmail())
@@ -38,6 +38,15 @@ public class UserMapper {
                 .role(from.getRole())
                 .status(from.getStatus())
                 .build();
+    }
+
+    public void mapDtoToEntity(UserDto from, UserEntity to) {
+        to.setFirstName(from.getFirstName());
+        to.setLastName(from.getLastName());
+        to.setEmail(from.getEmail());
+        to.setPhone(from.getPhone());
+        to.setRole(from.getRole());
+        to.setStatus(from.getStatus());
     }
 
     public List<UserDto> mapToDtoList(List<UserEntity> from) {
