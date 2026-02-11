@@ -1,0 +1,112 @@
+type MovieDto {
+    id: ID
+    title: String
+    year: Int
+    rated: String
+    released: String
+    runtime: String
+    genre: [String]
+    director: String
+    writer: String
+    actors: String
+    plot: String
+    languages: [String]
+    countries: [String]
+    awards: String
+    metaScore: Int
+    imdbRating: String
+    type: String
+    categories: [String]
+    images: [MovieImage]
+    assets: [MovieAsset]
+}
+
+type MovieImage {
+    id: ID
+    fileId: ID
+    name: String
+    format: String
+    type: Int
+    url: String
+}
+
+type MoviePage {
+    page: Int!
+    pageSize: Int!
+    total: Int!
+    totalPages: Int!
+    items: [MovieDto!]
+}
+
+type MovieByCategory {
+    category: String
+    movies: [MovieDto]
+}
+
+type MovieByGenre {
+    genre: String
+    movies: [MovieDto]
+}
+
+# Request
+input MovieByGenreRequest {
+    limit: Int
+    genres: [String]
+}
+
+input MovieFilterRequest {
+    genres: [String]
+    countries: [String]
+    languages: [String]
+    year: String
+    rating: String
+    rated: String
+    type: String
+    title: String
+    sort: String
+    page: Int
+    pageSize: Int
+}
+
+input MovieInput {
+    id: ID
+    title: String
+    year: Int
+    rated: String
+    released: String
+    runtime: String
+    genre: [String]
+    director: String
+    writer: String
+    actors: String
+    plot: String
+    languages: [String]
+    countries: [String]
+    awards: String
+    metaScore: Int
+    imdbRating: String
+    type: String
+    categories: [String]
+    images: [MovieImageInput]
+    assets: [MovieAssetInput]
+}
+
+input MovieImageInput {
+    id: ID
+    name: String
+    format: String
+    type: Int
+    url: String
+}
+
+type Query {
+    getMovieById(id: ID!): MovieDto
+    getMoviesByFilter(request: MovieFilterRequest!): MoviePage
+}
+
+type Mutation {
+    createMovie(movie: MovieInput!): MovieDto
+    createListMovie(movies: [MovieInput!]!): Int
+    updateMovie(id: ID!, movie: MovieInput!): MovieDto
+    deleteMovie(id: ID!): String
+}
