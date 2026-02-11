@@ -1,0 +1,13 @@
+spring:
+  cors:
+    allowed-origin-patterns: ${SPRING_CORS_ALLOWED_ORIGIN_PATTERNS}
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/netfliz}
+    username: ${SPRING_DATASOURCE_USERNAME:}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+
+application:
+  security:
+    jwt:
+      secret-key: ${SPRING_SECURITY_JWT_SECRET_KEY:}
