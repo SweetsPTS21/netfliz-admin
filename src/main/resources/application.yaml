@@ -32,6 +32,11 @@ spring:
           default:
             directory_provider: local-heap
 
+  servlet:
+    multipart:
+      max-file-size: 600MB
+      max-request-size: 600MB
+
 
 application:
   security:

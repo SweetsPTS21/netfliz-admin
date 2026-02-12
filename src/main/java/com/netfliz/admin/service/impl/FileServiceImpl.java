@@ -86,6 +86,7 @@ public class FileServiceImpl implements FileService {
             String path = String.format("%s/%s", UploadKey.IMAGES_PATH, filename);
 
             // upload and ger url
+            log.info("Uploading resized image: {}", path);
             String url = b2Service.upload(resized, path, fileType);
 
             return fileMapper.buildFileEntity(file, filename, url, String.valueOf(width), "ADMIN");
