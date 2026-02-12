@@ -1,11 +1,11 @@
 package com.netfliz.admin.service.impl;
 
-import com.netfliz.admin.constant.enums.MovieAssetType;
-import com.netfliz.admin.constant.enums.MovieImageType;
-import com.netfliz.admin.constant.enums.MovieObjectType;
+import com.netfliz.admin.constant.Constants;
+import com.netfliz.admin.constant.enums.*;
 import com.netfliz.admin.dto.MovieAssetDto;
 import com.netfliz.admin.dto.MovieDto;
 import com.netfliz.admin.dto.MovieImageDto;
+import com.netfliz.admin.dto.MovieMetadataDto;
 import com.netfliz.admin.dto.request.MovieFilterRequest;
 import com.netfliz.admin.dto.response.PageResponse;
 import com.netfliz.admin.entity.MovieAssetEntity;
@@ -20,6 +20,7 @@ import com.netfliz.admin.repository.CustomMovieRepository;
 import com.netfliz.admin.repository.MovieAssetRepository;
 import com.netfliz.admin.repository.MovieImageRepository;
 import com.netfliz.admin.repository.MovieRepository;
+import com.netfliz.admin.service.MovieGenreService;
 import com.netfliz.admin.service.MovieService;
 import com.netfliz.admin.validator.MovieAssetValidator;
 import com.netfliz.admin.validator.MovieValidator;
@@ -44,6 +45,11 @@ public class MovieServiceImpl implements MovieService {
     private final MovieAssetMapper movieAssetMapper;
     private final MovieAssetValidator movieAssetValidator;
     private final CustomMovieRepository customMovieRepository;
+    private final MovieGenreService movieGenreService;
+
+    private static String buildSlug(String value) {
+        return value.toLowerCase().replace(" ", "-");
+    }
 
     @Override
     public PageResponse<MovieDto> getMoviesByFilter(MovieFilterRequest request) {
@@ -156,6 +162,38 @@ public class MovieServiceImpl implements MovieService {
         return totalInserted;
     }
 
+    @Override
+    public MovieMetadataDto getMovieMetadata() {
+        var genreList = Optional.ofNullable(movieGenreService.getAllMovieGenres()).orElse(new ArrayList<>());
+        var genres = genreList.stream()
+                .map(genre -> buildMetadata(genre.getName(), genre.getTitle()))
+                .toList();
+        var countries = Arrays.stream(MovieCountry.values())
+                .map(country -> buildMetadata(country.getValue(), country.getDescription()))
+                .toList();
+        var languages = Arrays.stream(MovieLanguage.values())
+                .map(language -> buildMetadata(language.getValue(), language.getDescription()))
+                .toList();
+        var rated = Arrays.stream(MovieRated.values())
+                .map(rate -> buildMetadata(rate.getValue(), rate.getDescription()))
+                .toList();
+        var types = Arrays.stream(MovieType.values())
+                .map(type -> buildMetadata(type.getValue(), type.getDescription()))
+                .toList();
+        var years = Constants.DEFAULT_YEARS.stream()
+                .map(year -> buildMetadata(String.valueOf(year), String.valueOf(year)))
+                .toList();
+
+        return MovieMetadataDto.builder()
+                .genres(genres)
+                .countries(countries)
+                .languages(languages)
+                .rated(rated)
+                .types(types)
+                .years(years)
+                .build();
+    }
+
     private void mapMovieImageAndAsset(List<MovieDto> movies, Collection<Long> movieIds) {
         Map<Long, List<MovieImageEntity>> mapImage = movieImageRepository
                 .findByObjectIdsAndObjectType(movieIds, MovieObjectType.MOVIE)
@@ -265,5 +303,13 @@ public class MovieServiceImpl implements MovieService {
         });
 
         return updated;
+    }
+
+    private MovieMetadataDto.Metadata buildMetadata(String value, String description) {
+        return MovieMetadataDto.Metadata.builder()
+                .value(value)
+                .description(description)
+                .slug(buildSlug(value))
+                .build();
     }
 }

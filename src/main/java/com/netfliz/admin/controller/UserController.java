@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok("Xóa user thành công");
     }
 
-    @PostMapping("/{id}/disable")
+    @PutMapping("/{id}/disable")
     public ResponseEntity<Object> disableUser(@PathVariable Long id) {
         userService.disableUser(id);
         return ResponseEntity.ok("Disable user thành công");

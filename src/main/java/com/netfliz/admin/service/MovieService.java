@@ -1,6 +1,7 @@
 package com.netfliz.admin.service;
 
 import com.netfliz.admin.dto.MovieDto;
+import com.netfliz.admin.dto.MovieMetadataDto;
 import com.netfliz.admin.dto.request.MovieFilterRequest;
 import com.netfliz.admin.dto.response.PageResponse;
 
@@ -52,4 +53,9 @@ public interface MovieService {
      * @return number of inserted movies
      */
     Integer bulkMovie(List<MovieDto> movies);
+
+    /**
+     * Get movie metadata
+     */
+    MovieMetadataDto getMovieMetadata();
 }

@@ -24,6 +24,8 @@ public class UserMapper {
                 .phone(from.getPhone())
                 .role(from.getRole())
                 .status(from.getStatus())
+                .createdAt(CommonUtils.instantToLocalDateTime(from.getCreatedAt()))
+                .updatedAt(CommonUtils.instantToLocalDateTime(from.getUpdatedAt()))
                 .build();
     }
 
@@ -37,6 +39,8 @@ public class UserMapper {
                 .phone(from.getPhone())
                 .role(from.getRole())
                 .status(from.getStatus())
+                .createdAt(CommonUtils.localDateTimeToInstant(from.getCreatedAt()))
+                .updatedAt(CommonUtils.localDateTimeToInstant(from.getUpdatedAt()))
                 .build();
     }
 

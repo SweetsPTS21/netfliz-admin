@@ -1,18 +1,13 @@
 package com.netfliz.admin.controller;
 
 import com.netfliz.admin.dto.MovieDto;
+import com.netfliz.admin.dto.MovieMetadataDto;
 import com.netfliz.admin.dto.request.MovieFilterRequest;
 import com.netfliz.admin.dto.response.PageResponse;
 import com.netfliz.admin.service.MovieService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/movies")
@@ -43,5 +38,10 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public void deleteMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);
+    }
+
+    @GetMapping("/metadata")
+    public ResponseEntity<MovieMetadataDto> getMovieMetadata() {
+        return ResponseEntity.ok(movieService.getMovieMetadata());
     }
 }
