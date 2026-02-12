@@ -11,3 +11,12 @@ application:
   security:
     jwt:
       secret-key: ${SPRING_SECURITY_JWT_SECRET_KEY:}
+
+backblaze:
+  b2:
+    access-key-id: ${BACKBLAZE_B2_ACCESS_KEY_ID:}
+    bucket-name: ${BACKBLAZE_B2_BUCKET_NAME:}
+    worker-shared-secret: ${BACKBLAZE_B2_WORKER_SHARED_SECRET:}
+    secret-access-key: ${BACKBLAZE_B2_SECRET_KEY:}
+    endpoint: ${BACKBLAZE_B2_ENDPOINT:}
+    region: ${BACKBLAZE_B2_REGION:}
