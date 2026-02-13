@@ -63,7 +63,7 @@ public class FileServiceImpl implements FileService {
         fileValidator.validateImage(file);
         int width = 1024;
 
-        return fileMapper.mapToDto(uploadResizedImage(file, width));
+        return fileMapper.mapToDto(fileRepository.save(uploadResizedImage(file, width)));
     }
 
     @Override

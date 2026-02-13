@@ -9,6 +9,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameterValue;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -53,6 +54,7 @@ public class CustomMovieRepositoryImpl implements CustomMovieRepository {
     public Page<MovieEntity> findByFilter(MovieFilterRequest request) {
         StringBuilder whereClause = new StringBuilder(" WHERE 1=1");
         MapSqlParameterSource params = new MapSqlParameterSource();
+        Pageable pageable = request.getPageable();
 
         if (!CollectionUtils.isEmpty(request.getGenres())) {
             whereClause.append(" AND jsonb_exists_any(genre, :genres)");
@@ -118,8 +120,8 @@ public class CustomMovieRepositoryImpl implements CustomMovieRepository {
 
         // Add pagination
         whereClause.append(" LIMIT :limit OFFSET :offset");
-        params.addValue("limit", request.getPageSize());
-        params.addValue("offset", (long) request.getPage() * request.getPageSize());
+        params.addValue("limit", pageable.getPageSize());
+        params.addValue("offset", pageable.getOffset());
 
         // Build final query
         String searchSql = "SELECT * FROM movies" + whereClause;
